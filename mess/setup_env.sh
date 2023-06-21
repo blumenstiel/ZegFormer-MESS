@@ -2,15 +2,16 @@
 # bash mess/setup_env.sh
 
 # Create new environment "mess"
-conda create --name mess -y python=3.8
+conda create --name zegformer -y python=3.7
 source ~/miniconda3/etc/profile.d/conda.sh
-conda activate mess
+conda activate zegformer
 
-# Install PyTorch with CUDA 11.3
-conda install -y pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.3 -c pytorch -c conda-forge
-# Install Detectron2
-python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html
+# Install ZegFormer requirements
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html
+pip install -r requirements.txt
 
+# Install packages for dataset preparation
 pip install gdown
 pip install kaggle
 pip install rasterio

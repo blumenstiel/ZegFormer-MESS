@@ -8,6 +8,7 @@ from torch.nn import functional as F
 
 from detectron2.config import configurable
 from detectron2.layers import Conv2d
+from detectron2.data import MetadataCatalog
 
 from .position_encoding import PositionEmbeddingSine
 from .transformer import Transformer
@@ -44,6 +45,8 @@ class TransformerZeroshotPredictor(nn.Module):
         prompt_ensemble_type: str,
         wordvec: bool,
         temperature: float,
+        train_dataset: str,
+        test_dataset: str,
     ):
         """
         NOTE: this interface is experimental.
@@ -69,10 +72,12 @@ class TransformerZeroshotPredictor(nn.Module):
         ####################################################################################
         import json
         # use class_texts in train_forward, and test_class_texts in test_forward
-        with open(train_class_json, 'r') as f_in:
-            self.class_texts = json.load(f_in)
-        with open(test_class_json, 'r') as f_in:
-            self.test_class_texts = json.load(f_in)
+        # with open(train_class_json, 'r') as f_in:
+        #     self.class_texts = json.load(f_in)
+        # with open(test_class_json, 'r') as f_in:
+        #     self.test_class_texts = json.load(f_in)
+        self.class_texts = MetadataCatalog.get(train_dataset).stuff_classes
+        self.test_class_texts = MetadataCatalog.get(test_dataset).stuff_classes
         assert self.class_texts != None
         if self.test_class_texts == None:
             self.test_class_texts = self.class_texts
@@ -220,6 +225,10 @@ class TransformerZeroshotPredictor(nn.Module):
         ret["prompt_ensemble_type"] = cfg.MODEL.PROMPT_ENSEMBLE_TYPE
         ret["wordvec"] = cfg.MODEL.SEM_SEG_HEAD.WORDVEC
         ret["temperature"] = cfg.MODEL.SEM_SEG_HEAD.TEMPERATURE
+        assert len(cfg.DATASETS.TRAIN) == 1, "only support single train dataset"
+        ret['train_dataset'] = cfg.DATASETS.TRAIN[0]
+        assert len(cfg.DATASETS.TEST) == 1, "only support single test dataset"
+        ret['test_dataset'] = cfg.DATASETS.TEST[0]
 
         return ret
 

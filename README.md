@@ -1,26 +1,27 @@
-# Multi-domain Evaluation of Semantic Segmentation (MESS) with SAN
+# Multi-domain Evaluation of Semantic Segmentation (MESS) with ZegFormer
 
-[[Website](https://github.io)] [[arXiv](https://arxiv.org/)] [[GitHub](https://github.com/blumenstiel/MESS)]
+[[Website (soon)](https://github.io)] [[arXiv (soon)](https://arxiv.org/)] [[GitHub](https://github.com/blumenstiel/MESS)]
 
-This directory contains the code for the MESS evaluation of SAN. Please see the commits for our changes of the model.
+This directory contains the code for the MESS evaluation of ZegFormer. Please see the commits for our changes of the model.
 
 ## Setup
-Create a conda environment `san` and install the required packages. See [mess/README.md]([mess/README.md]) for details.
+Create a conda environment `zegformer` and install the required packages. See [mess/README.md]([mess/README.md]) for details.
 ```sh
  bash mess/setup_env.sh
 ```
 
-Prepare the datasets by following the instructions in [mess/DATASETS.md](mess/DATASETS.md). The `san` env can be used for the dataset preparation. If you evaluate multiple models with MESS, you can change the `dataset_dir` argument and the `DETECTRON2_DATASETS` environment variable to a common directory (see [mess/DATASETS.md](mess/DATASETS.md) and [mess/eval.sh](mess/eval.sh)). 
+Prepare the datasets by following the instructions in [mess/DATASETS.md](mess/DATASETS.md). The `zegformer` env can be used for the dataset preparation. If you evaluate multiple models with MESS, you can change the `dataset_dir` argument and the `DETECTRON2_DATASETS` environment variable to a common directory (see [mess/DATASETS.md](mess/DATASETS.md) and [mess/eval.sh](mess/eval.sh), e.g., `../mess_datasets`). 
 
-Download the SAN weights with
+Download the ZegFormer weights (see https://github.com/dingjiansw101/ZegFormer)
 ```sh
 mkdir weights
-wget https://huggingface.co/Mendel192/san/resolve/main/san_vit_b_16.pth -O weights/san_vit_b_16.pth
-wget https://huggingface.co/Mendel192/san/resolve/main/san_vit_large_14.pth -O weights/san_vit_large_14.pth
+conda activate zegformer
+# Python code for downloading the weights from GDrive. Link: https://drive.google.com/file/d/1bA6DXr9VOMsRkU0vyY2EpGRkyQnhnze3/view?usp=drive_link
+python -c "import gdown; gdown.download(f'https://drive.google.com/uc?export=download&confirm=pbef&id=1bA6DXr9VOMsRkU0vyY2EpGRkyQnhnze3', output='weights/zegformer_R101_bs32_60k_vit16_coco-stuff.pth')"
 ```
 
 ## Evaluation
-To evaluate the SAN models on the MESS dataset, run
+To evaluate the ZegFormer on the MESS datasets, run
 ```sh
 bash mess/eval.sh
 
@@ -31,17 +32,14 @@ tail -f eval.log
 
 For evaluating a single dataset, select the DATASET from [mess/DATASETS.md](mess/DATASETS.md), the DETECTRON2_DATASETS path, and run
 ```
-conda activate san
+conda activate zegformer
 export DETECTRON2_DATASETS="datasets"
 DATASET=<dataset_name>
 
-# Base model
-python train_net.py --eval-only --num-gpus 1 --config-file configs/san_clip_vit_res4_coco.yaml OUTPUT_DIR output/SAN_base/$DATASET MODEL.WEIGHTS weights/san_vit_b_16.pth DATASETS.TEST \(\"$DATASET\",\)
-# Large model
-python train_net.py --eval-only --num-gpus 1 --config-file configs/san_clip_vit_large_res4_coco.yaml OUTPUT_DIR output/SAN_large/$DATASET MODEL.WEIGHTS weights/san_vit_large_14.pth DATASETS.TEST \(\"$DATASET\",\)
+python train_net.py --num-gpus 1 --eval-only --config-file configs/coco-stuff/zegformer_R101_bs32_60k_vit16_coco-stuff_gzss_eval_847_classes.yaml MODEL.WEIGHTS weights/zegformer_R101_bs32_60k_vit16_coco-stuff.pth OUTPUT_DIR output/ZegFormer/$DATASET DATASETS.TEST \(\"$DATASET\",\)
 ```
 
-# --- Original SAN README.md ---
+# --- Original ZegFormer README.md ---
 
 # Decoupling Zero-Shot Semantic Segmentation
 This is the official code for the [ZegFormer](https://arxiv.org/abs/2112.07910) (CVPR 2022).
