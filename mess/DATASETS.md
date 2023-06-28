@@ -1,4 +1,4 @@
-# Datasets for Mulit-domain Evaluation of Semantic Segmentation (MESS) 
+# Datasets for Multi-domain Evaluation of Semantic Segmentation (MESS) 
 
 ## Download datasets
 
@@ -28,34 +28,36 @@ Alternatively, you can install an environment with the following steps:
 
 Copy the `mess` folder to your project root.
 
-Next, create a new python environment (>=3.8). Install [torch](https://pytorch.org/get-started/previous-versions/), followed by `detectron2`. Please consider compatible versions between these packages, see https://detectron2.readthedocs.io/en/latest/tutorials/install.html for further install instructions.
+Next, create a new python environment (>=3.6). Install [torch](https://pytorch.org/get-started/previous-versions/), followed by `detectron2`. Please consider compatible versions between these packages, see https://detectron2.readthedocs.io/en/latest/tutorials/install.html for further install instructions.
 
 Install the following packages:
 ```sh
 gdown
 kaggle
 rasterio
+pandas
 ```
 
-In needed, install unrar and save your Kaggle API key.
+If needed, install unrar and save your Kaggle API key.
 
 ## Dataset download and preparation
 
 You can download and prepare all datasets by running the following script. Note that the datasets are provided by external parties and are not associated with this repository. Please consider the terms and conditions of each dataset, which are linked below.
 
-If you are using another dataset directory than `datasets`, you have to export it as the `DETECTRON2_DATASETS` variable before evaluating the models (see `mess/eval.sh`).
 ```bash
 # Activate a working environment
 conda actviate mess
 
 python mess/prepare_all_datasets.py --dataset_dir datasets
 
-# your can check the preperation with
+# your can check the preparation with
 python mess/prepare_all_datasets.py --dataset_dir datasets --stats
 ```
 
 Four datasets require a manual download that are listed above.
 If the automatic downloads do not work, please consider the descriptions below.
+
+If you are using another dataset directory than `datasets`, you have to export it as the `DETECTRON2_DATASETS` environment variable before evaluating the models (see `mess/eval.sh`). E.g, `export DETECTRON2_DATASETS=../mess_datasets` when evaluating multiple models.
 
 ## Dataset overview
 We provide an overview of all datasets in the following. Please note the different licenses of the datasets. 
@@ -63,6 +65,32 @@ If you use the datasets, please cite the corresponding papers.
 We provide the BibTeX for all datasets in [datasets.bib](datasets.bib).
 
 The scripts currently only support the download and preprocessing for the val/test splits.
+
+Datasets:
+1. [BDD100K](#bdd100k)
+2. [Dark Zurich](#dark-zurich)
+3. [MHP v1](#mhp-v1)
+4. [FoodSeg103](#foodseg103) 
+5. [ATLANTIS](#atlantis)
+6. [DRAM](#dram)
+7. [iSAID](#isaid)
+8. [ISPRS Potsdam](#isprs-potsdam)
+9. [WorldFloods](#worldfloods)
+10. [FloodNet](#floodnet)
+11. [UAVid](#uavid)
+12. [Kvasir-Instrument](#kvasir-instrument)
+13. [CryoNuSeg](#cryonuseg)
+14. [CHASE DB1](#chase-bd1)
+15. [PAXRay-4](#paxray-4)
+16. [Corrosion CS](#corrosion-cs)
+17. [DeepCrack](#deepcrack)
+18. [PST900](#pst900)
+19. [ZeroWaste-f](#zerowaste-f)
+20. [SUIM](#suim)
+21. [CUB-200](#cub-200)
+22. [CWFID](#cwfid)
+
+
 
 ### Custom datasets
 
@@ -534,11 +562,11 @@ If the download does not work, download the git repo manually and place the data
 
 ### BibTeX
 
-We provide all BibTeX entries for the dataset papers in the [datasets.bib](datasets.bib) file. The BibTeX entries are named after the dataset with the pattern "Dataset<Name>", while " " and "-" are removed from the name. If you use the MESS benchmark, please cite  our paper:
+We provide all BibTeX entries for the dataset papers in the [datasets.bib](datasets.bib) file. The BibTeX entries are named after the dataset with the pattern "Dataset<Name>", while " " and "-" are removed from the name. If you use the MESS benchmark, please cite our paper:
 
 ```
 @article{MESSBenchmark2023,
-  title={What a MESS: Mulit-domain Evaluation of Zero-shot Semantic Segmentation},
+  title={What a MESS: Multi-domain Evaluation of Zero-shot Semantic Segmentation},
   author={Blumenstiel, Benedikt and Jakubik, Johannes and Kühne, Hilde and Vössing, Michael},
   year={2023}
 }
